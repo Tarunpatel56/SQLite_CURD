@@ -1,21 +1,25 @@
 class notesModel {
-  String? id;
+  int? id;
   String? title;
   String? description;
 
   notesModel({this.id, this.title, this.description});
 
-  notesModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    description = json['description'];
+  notesModel.fromMap(Map<String, dynamic> res) {
+    id = res['id'];
+    title = res['title'];
+    description = res['description'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    return data;
+  Map<String, dynamic> toMap() {
+    // final Map<String, dynamic> data = new Map<String, dynamic>();
+    // data['id'] = this.id;
+    // data['title'] = this.title;
+    // data['description'] = this.description;
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+    };
   }
 }
