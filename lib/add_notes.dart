@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqlite/db_helper.dart';
 
 class AddNotes extends StatefulWidget {
   const AddNotes({super.key});
@@ -8,6 +9,15 @@ class AddNotes extends StatefulWidget {
 }
 
 class _AddNotesState extends State<AddNotes> {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  DBHelper? dbHelper;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dbHelper = DBHelper();
+  }
   @override
   Widget build(BuildContext context) {
    
@@ -35,11 +45,13 @@ class _AddNotesState extends State<AddNotes> {
             child: Column(children: [
               TextFormField(
                 maxLines: 1,
+                controller: titleController,
                 style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 decoration: InputDecoration(hintText: "Title",border: InputBorder.none),
               ),
                 TextFormField(
                 maxLines: 7,
+                controller: descriptionController,
                
                 decoration: InputDecoration(hintText: "Description",border: InputBorder.none),
               )
