@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:sqlite/db_helper.dart';
 import 'package:sqlite/notes_model.dart';
-import 'package:sqlite/notes_screen.dart';
 
-class AddNotes extends StatefulWidget {
-  const AddNotes({super.key});
+class EditNotes extends StatefulWidget {
+  final int? id;
+  final String title;
+  final String description;
+  const EditNotes({super.key, required this.id, required this.title, required this.description});
 
   @override
-  State<AddNotes> createState() => _AddNotesState();
+  State<EditNotes> createState() => _EditNotesState();
 }
 
-class _AddNotesState extends State<AddNotes> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+class _EditNotesState extends State<EditNotes> {
+ late TextEditingController titleController = TextEditingController(text: widget.title);
+ late TextEditingController descriptionController = TextEditingController(text: widget.description);
   DBHelper? dbHelper;
- late Future<List<notesModel>> notesList;
+late Future<List<notesModel>> notesList;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     dbHelper = DBHelper();
+  
   }
   @override
   Widget build(BuildContext context) {
-   
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         title: Text("Add Note"),
         centerTitle: true,
@@ -61,15 +63,16 @@ class _AddNotesState extends State<AddNotes> {
             ],),
           ),
           InkWell( onTap: () {
-            dbHelper!.insert(notesModel(
-              title:titleController.text.toString(),
-              description:descriptionController.text.toString(), 
-            )).then((value){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>NotesScreen()));
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Note Added Successfully!")));
-            }).onError((error, stackTrace) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("error")));
-            });
+           dbHelper!.update(notesModel(
+            id: widget.id,
+            title:titleController.text.toString(),
+            description:descriptionController.text.toString(), 
+           )).then((value){ notesList = dbHelper!.getNotesList(); 
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Note Updated Successfully!")));
+           }).onError((error, stackTrace) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("error")));
+           });
           },
             child: Container(
               height: 50,width: double.infinity,

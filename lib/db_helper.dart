@@ -1,9 +1,6 @@
-import 'dart:io' as io;
-
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:sqlite/notes_model.dart';
 
 class DBHelper {
@@ -17,8 +14,7 @@ class DBHelper {
   }
 
   initDatabase() async {
-    io.Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, "notes.db");
+    String path = join(await getDatabasesPath(), "notes.db");
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
@@ -58,4 +54,6 @@ class DBHelper {
       whereArgs: [notesModel.id],
     );
   }
+
+  update(notesModel notesModel) {}
 }
